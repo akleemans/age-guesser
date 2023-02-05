@@ -1,0 +1,111 @@
+<section class="container">
+  <img src="assets/logo.png" style="width: 400px;" alt="logo">
+  <div class="description">
+    <p>Gib deinen Vornamen und den von 3-10 deiner Freunde im ein und lass dein Alter schätzen*!</p>
+    <small>* = basierend auf den Namensstatistiken der Schweiz</small>
+  </div>
+  <div>
+    <mat-form-field class="name-form-field" appearance="fill">
+      <mat-label>Vorname eingeben</mat-label>
+      <input type="text" matInput [formControl]="nameCtrl" [matAutocomplete]="auto">
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                        (optionSelected)="selected($event)">
+        <mat-option *ngFor="let name of filteredNames | async" [value]="name">
+          {{name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <div>
+      <mat-card class="name-card" *ngFor="let selectedPerson of selectedPeople">
+        <mat-card-header>
+          <div mat-card-avatar [style.background-size]="'cover'"
+               [style.background-image]="getImage(selectedPerson)">
+          </div>
+          <mat-card-title style="width: 172px;">
+            {{selectedPerson.name}}
+          </mat-card-title>
+          <mat-card-subtitle>
+            <span *ngIf="getIndex(selectedPerson) === 0">Du!</span>
+            <ng-template [ngIf]="getIndex(selectedPerson) > 0">
+              <span *ngIf="selectedPerson.ageDifference === 0">
+                gleichalt wie du
+              </span>
+              <span *ngIf="selectedPerson.ageDifference > 0">
+                {{selectedPerson.ageDifference}} Jahr{{selectedPerson.ageDifference === 1 ? ''
+                : 'e'}} älter
+              </span>
+              <span *ngIf="selectedPerson.ageDifference < 0">
+                {{-selectedPerson.ageDifference}} Jahr{{selectedPerson.ageDifference === -1 ? ''
+                : 'e'}} jünger
+              </span>
+            </ng-template>
+            <div class="header-icons" *ngIf="getIndex(selectedPerson) !== 0">
+              <mat-icon class="action-icon icon-small" (click)="changeAge(selectedPerson, -1)"
+                        *ngIf="selectedPerson.ageDifference > -10">
+                remove_circle_outline
+              </mat-icon>
+              <mat-icon class="action-icon icon-small" (click)="changeAge(selectedPerson, 1)"
+                        *ngIf="selectedPerson.ageDifference < 10">
+                add_circle_outline
+              </mat-icon>
+            </div>
+          </mat-card-subtitle>
+          <mat-icon class="action-icon" (click)="remove(selectedPerson)">close</mat-icon>
+        </mat-card-header>
+      </mat-card>
+    </div>
+  </div>
+
+  <button mat-raised-button (click)="guess()" style="margin-bottom: 30px;"
+          [disabled]="selectedPeople.length < 3 || selectedPeople.length > 10">
+    Alter schätzen
+  </button>
+
+  <section class="result" *ngIf="guesses">
+    <h1>
+      Dein Alter ist {{guesses[0]}} Jahre!
+    </h1>
+    <h3 style="margin-bottom: 10px;">
+      Auch gut möglich: {{guesses[1]}} Jahre, {{guesses[2]}} Jahre oder {{guesses[3]}} Jahre
+    </h3>
+    <p>
+      (Stimmt nicht? Je mehr Namen du eingibst, desto besser sollte die Schätzung sein.)
+    </p>
+
+    <div>
+      Kombinierte Namensverteilung:
+    </div>
+    <div style="display: block; margin-bottom: 10px;">
+      <canvas baseChart width="600" height="400"
+              [type]="'line'"
+              [data]="lineChartData"
+              [options]="lineChartOptions"
+              [legend]="false">
+      </canvas>
+    </div>
+
+    <p style="margin-bottom: 20px;">
+      Du möchtest die Verteilung einzelner Namen sehen? Schau doch mal bei <a
+      href="https://vornamen.opendata.ch/">vornamen.opendata.ch</a> vorbei!
+    </p>
+
+    <div style="margin-bottom: 10px;">
+      Erstellt von <a href="https://www.kleemans.ch/">Adrianus Kleemans</a> |
+      Daten: <a
+      href="https://www.bfs.admin.ch/bfs/de/home/statistiken/bevoelkerung/geburten-todesfaelle.html">BFS</a>
+      |
+      Avatare: <a href="https://api.multiavatar.com/">Multiavatar</a> |
+      Chart: <a href="https://www.chartjs.org/docs/latest/">Chart.js</a> |
+      Logo: <a href="https://logo.com/">logo.com</a>
+    </div>
+    <!--
+    <div style="display: flex;">
+      <div>
+        <ng-container>Page hits:</ng-container> {{visitors?.visitorsMonth || '?'}}
+        <ng-container>diesen Monat</ng-container>, {{visitors?.visitorsTotal || '?'}} <ng-container>total</ng-container>
+      </div>
+    </div>
+    -->
+  </section>
+</section>
