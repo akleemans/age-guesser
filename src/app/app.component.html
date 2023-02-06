@@ -1,5 +1,5 @@
 <section class="container">
-  <img src="assets/logo.png" style="width: 400px;" alt="logo">
+  <img src="assets/logo.png" class="logo" alt="logo">
   <div class="description">
     <p>Gib deinen Vornamen und den von 3-10 deiner Freunde im ein und lass dein Alter schätzen*!</p>
     <small>* = basierend auf den Namensstatistiken der Schweiz</small>
@@ -77,7 +77,7 @@
       Kombinierte Namensverteilung:
     </div>
     <div style="display: block; margin-bottom: 10px;">
-      <canvas baseChart width="600" height="400"
+      <canvas baseChart class="chart-canvas"
               [type]="'line'"
               [data]="lineChartData"
               [options]="lineChartOptions"
