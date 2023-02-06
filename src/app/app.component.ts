@@ -20,8 +20,8 @@ interface VisitorResponse {
 }
 
 interface Stat {
-  counts: number[];
-  name: string;
+  d: number[];
+  n: string;
 }
 
 @Component({
@@ -129,8 +129,8 @@ export class AppComponent implements OnInit {
 
   public guess(): void {
     const selectedNames = this.selectedPeople.map(person => person.name);
-    const separateCounts = selectedNames.map(name => this.stats.find(stat => stat.name === name)!)
-    .map(stat => stat.counts);
+    const separateCounts = selectedNames.map(name => this.stats.find(stat => stat.n === name)!)
+    .map(stat => stat.d);
 
     const counts = separateCounts[0].map(sc => sc);
     for (let i = 1; i < separateCounts.length; i++) {
@@ -190,9 +190,7 @@ export class AppComponent implements OnInit {
           return p.name
         }).join(',')
       },
-      queryParamsHandling: 'merge',
-      // TODO check if needed
-      // skipLocationChange: true
+      queryParamsHandling: 'merge'
     }).then();
   }
 }
