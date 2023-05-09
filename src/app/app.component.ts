@@ -173,7 +173,7 @@ export class AppComponent implements OnInit {
   }
 
   private fetchVisitorCount(): void {
-    this.http.get<VisitorResponse>('https://akleemans.pythonanywhere.com/api/visitors')
+    this.http.get<VisitorResponse>('https://akleemans.pythonanywhere.com/api/visitors?project=age-guesser')
     .subscribe(visitorResponse => this.visitors = visitorResponse);
   }
 
